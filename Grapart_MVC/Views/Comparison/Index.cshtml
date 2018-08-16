@@ -1,0 +1,105 @@
+﻿@model Grapart_MVC.Models.Comparison
+
+@{
+                ViewBag.Title = "Порівняння";
+                Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <h5 >Параметри експеримента:</h5>
+        @using (Html.BeginForm())
+    {
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.step, htmlAttributes: new { @class = "control-label col-12" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.step, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title="від 1 до 5", @data_placement="left" } })
+                    @Html.ValidationMessageFor(model => model.step, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Почати" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+}
+    </div>
+    <div class="col-md-8">
+        <h5 class="text-center">Експеримент "Порівняльний Аналіз Алгоритмів розбиття"</h5>
+
+        @if (ViewBag.Image != null)
+    {
+
+        <h6>Гістограма залежності часу роботи алгоритму від розмірності задачі:</h6>
+        <p class="text-muted">Кожен стовпець гістограми відповідає часу роботи відповідного алгоритма на задачі певної розмірності.</p>
+    var base64 = Convert.ToBase64String(ViewBag.Image);
+    var imgSrc = String.Format("data:image/png;base64,{0}", base64);
+
+    <img src="@imgSrc" />
+
+    <h6>Детальні результати експеримента </h6>
+    <p class="text-muted">Розв'язки задач, які розглядаються на гістограмі (у форматі .xls).</p>
+    <p>@Html.ActionLink("Завантажити", "Export", "Comparison", null, new { @class = "btn btn-default btn-success" })</p>
+    <h6>Деталі ходу розв'язання задачі найбільшої розмірності:</h6>
+        <button class="btn btn-outline-success" data-toggle="collapse" data-target="#charts"><i class="fa fa-line-chart ">Графіки</i></button>
+            <div id="charts" class="col-12 collapse">
+                
+                @if (ViewBag.ImageFM != null)
+                {
+
+
+                <p class="text-muted">Графік демонструє як змінювалась ЦФ (вага розрізу) в залежності від ітерації ФМ алгоритму.</p>
+                var base64FM = Convert.ToBase64String(ViewBag.ImageFM);
+                var imgSrcFM = String.Format("data:image/png;base64,{0}", base64FM);
+
+                <img src="@imgSrcFM" />
+                }
+                @if (ViewBag.ImageBee != null)
+                {
+
+                <p class="text-muted">Графік демонструє як змінювалась ЦФ (вага розрізу) в залежності від ітерації Бджолиного алгоритму.</p>
+                var base64Bee = Convert.ToBase64String(ViewBag.ImageBee);
+                var imgSrcBee = String.Format("data:image/png;base64,{0}", base64Bee);
+
+                <img src="@imgSrcBee" />
+                }
+        </div>
+        }
+        else
+
+        {
+        <ul>
+            <li class="text-muted">У ході проведення експеримента буде згенеровано та розв'язано 5 задач різної розмірності.<br></li>
+            <br>
+            <li class="text-muted">Розмірність першої задачі - граф з 4 вершинами. Крок збільшення вершин у графах наступних задач пропонується задати користувачу.<br></li>
+            <br>
+            <li class="text-muted">Результати експеримента будуть представлені у вигляді діаграми (залежності швидкодії алгоритмів від розмірності) та Excel документа розв'язків. <br></li>
+            <br>
+            <li class="text-muted">Щоб розпочати експеримент введіть крок збільшення кількості вершин та натисніть кнопку <strong>"Почати". </strong> <br></li>
+            <br>
+            <li class="text-muted"><span class="text-danger"><strong>Застереження!</strong></span> В залежності від апаратних можливостей, побудова результатів може зайняти певний час.<br></li>
+
+        </ul>
+        <br><br>
+        <div>
+            <blockquote class="blockquote text-right">
+                <p class="mb-0">Евристичні алгоритми (та студенти) не ідеальні, але намагаються ! </p>
+                <footer class="blockquote-footer">Розробники <cite title="Source Title">graPart</cite></footer>
+            </blockquote>
+        </div>
+        }
+
+    </div>
+    </div>
+
+
+

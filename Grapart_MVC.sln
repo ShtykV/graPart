@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grapart_MVC", "Grapart_MVC\Grapart_MVC.csproj", "{F21187C7-1D46-437C-BF56-04EDDDCED667}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F21187C7-1D46-437C-BF56-04EDDDCED667}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F21187C7-1D46-437C-BF56-04EDDDCED667}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F21187C7-1D46-437C-BF56-04EDDDCED667}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F21187C7-1D46-437C-BF56-04EDDDCED667}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {10CEC166-BE17-4262-9F53-A91E352BE7DA}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,309 @@
+﻿@model Grapart_MVC.Models.Solver
+
+@{
+    ViewBag.Title = "Розбиття";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+
+        @if (ViewBag.flag > 0)
+        {
+            using (Html.BeginForm("Solver", "Solver"))
+            {
+
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h5>Параметри Бджолиного алгоритму:</h5>
+
+                    @*<div class="form-group">
+
+                        <div class="col-md-offset-2 col-md-10">
+                            <p>@Html.ActionLink("Заповнити", "OptimalValues", "Solver", new { @class = "btn btn-default btn-outline-success", @data_toggle = "tooltip", @title = "Заповнити уніврсальними параметрами", @data_placement = "left" })</p>
+                        </div>
+                    </div>*@
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ns, htmlAttributes: new { @class = "control-label col-12" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ns, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 4 до 40", @data_placement = "left" } })
+                            @Html.ValidationMessageFor(model => model.ns, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.mb, htmlAttributes: new { @class = "control-label col-12" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.mb, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 2 до ns", @data_placement = "left" } })
+                            @Html.ValidationMessageFor(model => model.mb, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.nf, htmlAttributes: new { @class = "control-label col-12" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.nf, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 2*mb до 5*ns", @data_placement = "left" } })
+                            @Html.ValidationMessageFor(model => model.nf, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.r, htmlAttributes: new { @class = "control-label col-12", @data_toggle = "tooltip", @title = "Кількість змін у бджолах-фуражирах", @data_placement = "left" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.r, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 1 до V/4", @data_placement = "left" } })
+                            @Html.ValidationMessageFor(model => model.r, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.stopCount, htmlAttributes: new { @class = "control-label col-12" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.stopCount, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 1 до 30", @data_placement = "left" } })
+                            @Html.ValidationMessageFor(model => model.stopCount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <a href="@Url.Action("OptimalValues", "Solver")" class="btn  btn-outline-success" data-toggle="tooltip" title="Заповнити уніврсальними параметрами" data-placement="left"> Заповнити<i class="fa fa-arrow-up"></i></a>
+                            <input type="submit" value="Почати" class="btn btn-success center-block" data-toggle="tooltip" title="Запуск алгоритмів" data-placement="right" />
+                        </div>
+                    </div>
+                </div>
+
+
+            }
+        }
+
+        @using (Html.BeginForm("Index", "Solver"))
+        {
+
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <h5>Параметри генерації графа:</h5>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.verticesQuantity, htmlAttributes: new { @class = "control-label col-12" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.verticesQuantity, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 4 до 20", @data_placement = "left" } })
+                        @Html.ValidationMessageFor(model => model.verticesQuantity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.edgesQuantity, htmlAttributes: new { @class = "control-label col-12" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.edgesQuantity, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від V-1 до V*3", @data_placement = "left" } })
+                        @Html.ValidationMessageFor(model => model.edgesQuantity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Згенерувати" class="btn btn-success center-block" />
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+    <div class="col-md-8">
+        <h5 class="text-center">Експеримент "Розбиття випадкового графа"</h5>
+
+        @if (ViewBag.Flag == null)
+        {
+            <ul>
+                <li class="text-muted">
+                    <strong>Алгоритми</strong>. У ході проведення експеримента буде згенеровано випадковий граф та здійснено його розбиття двома алгоритмами. Перший алгоритм(
+                    <em>ФМ</em>) спирається на метод Федуччі-Маттеуса, другий(
+                    <em>Бджолиний</em>) - на метод Бджолиного рою.
+                </li>
+                <br />
+                <li class="text-muted">
+                    <strong>Граф</strong>.Генерується неорієнтований зважений (ваги у діапазоні [1,10]) граф, що відповідає умовам зв'язності, не містить петель та\або висячих вершин. Кількість ребер у згенерованому графі
+                    <em>може відрізнятися</em> від введеної для забезпечення вищезазначених умов.
+                </li>
+                <br />
+                <li class="text-muted">
+                    <strong>Результати</strong>. Результати подаються у вигляді таблиці, де кожному запису відповідає ребро графа. "І" та "ІІ" - вершини ребра графа. Якщо ребро входить до розрізу, знайденого за одним з алгоритмів, то у відповідній алгоритму комірці отримаємо "
+                    <strong>+</strong>", інакше "
+                    <strong>-</strong>".
+                </li>
+                <br />
+                <li class="text-muted">
+                    <strong>Параметри</strong>. ФМ алгоритм не потребує вхідних параметрів. Після генерації графа користувачу пропонується ввести параметри Бджолиного алгоритму та розпочати експеримент (запустити обидва алгоритми) натисканням кнопки "Почати".
+                </li>
+                <br />
+                <li class="text-muted">
+                    Для генерації графа введіть кількість вершин і ребер та натисніть кнопку
+                    <strong>"Згенерувати"</strong>.
+                </li>
+            </ul>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-outline-warning" data-toggle="collapse" data-target="#dovidka"><i class="fa fa-question-circle">Довідка</i></button>
+                </div>
+                <div id="dovidka" class="col-12 collapse">
+                    <ul>
+                        <li class="text-muted">
+                            <strong>Алгоритми</strong>. У ході проведення експеримента буде згенеровано випадковий граф та здійснено його розбиття двома алгоритмами. Перший алгоритм(
+                            <em>ФМ</em>) спирається на метод Федуччі-Маттеуса, другий(
+                            <em>Бджолиний</em>) - на метод Бджолиного рою.
+                        </li>
+                        <br />
+                        <li class="text-muted">
+                            <strong>Граф</strong>.Генерується неорієнтований зважений (ваги у діапазоні [1,10]) граф, що відповідає умовам зв'язності, не містить петель та\або висячих вершин. Кількість ребер у згенерованому графі
+                            <em>може відрізнятися</em> від введеної для забезпечення вищезазначених умов.
+                        </li>
+                        <br />
+                        <li class="text-muted">
+                            <strong>Результати</strong>. Результати подаються у вигляді таблиці, де кожному запису відповідає ребро графа. "І" та "ІІ" - вершини ребра графа. Якщо ребро входить до розрізу, знайденого за одним з алгоритмів, то у відповідній алгоритму комірці отримаємо "
+                            <strong>+</strong>", інакше "
+                            <strong>-</strong>".
+                        </li>
+                        <br />
+                        <li class="text-muted">
+                            <strong>Параметри</strong>. ФМ алгоритм не потребує вхідних параметрів. Після генерації графа користувачу пропонується ввести параметри Бджолиного алгоритму та розпочати експеримент (запустити обидва алгоритми) натисканням кнопки "Почати".
+                        </li>
+                        <br />
+                        <li class="text-muted">
+                            Для генерації графа введіть кількість вершин і ребер та натисніть кнопку
+                            <strong>"Згенерувати"</strong>.
+                        </li>
+                    </ul>
+                    <p></p>
+                </div>
+            </div>
+            if (ViewBag.ImageFM != null && ViewBag.ImageBee != null)
+            {
+                <h6>Деталі ходу розв'язання:</h6>
+                <button class="btn btn-outline-success" data-toggle="collapse" data-target="#charts"><i class="fa fa-line-chart ">Графіки</i></button>
+            }
+            <div id="charts" class="col-12 collapse">
+                @if (ViewBag.ImageFM != null && ViewBag.ImageBee != null)
+                {
+                    <p class="text-muted">Графік демонструє як змінювалась ЦФ (вага розрізу) в залежності від ітерації ФМ алгоритму.</p>
+                    var base64FM = Convert.ToBase64String(ViewBag.ImageFM);
+                    var imgSrcFM = String.Format("data:image/png;base64,{0}", base64FM);
+
+                    <img src="@imgSrcFM" />
+
+                    <p class="text-muted">Графік демонструє як змінювалась ЦФ (вага розрізу) в залежності від ітерації Бджолиного алгоритму.</p>
+                    var base64Bee = Convert.ToBase64String(ViewBag.ImageBee);
+                    var imgSrcBee = String.Format("data:image/png;base64,{0}", base64Bee);
+                    <img src="@imgSrcBee" />
+                }
+            </div>
+
+            <p></p>
+            <div class="row">
+                <div class="col-md-9">
+                    <table class="table table-hover table-sm table-condensed" border="1">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    I
+                                </th>
+                                <th scope="col">
+                                    IІ
+                                </th>
+                                <th scope="col">
+                                    Вага
+                                </th>
+                                <th scope="col">
+                                    ФМ
+                                </th>
+                                <th scope="col">
+                                    Бджолиний
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (ViewBag.Flag == 1)
+                            {
+                                foreach (var item in ViewBag.Result)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.first_vertex
+                                        </td>
+                                        <td>
+                                            @item.second_vertex
+                                        </td>
+                                        <td>
+                                            @item.weight
+                                        </td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                }
+                            }
+                            @if (ViewBag.Flag == 2)
+                            {
+                                foreach (var item in ViewBag.Result)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.first_vertex
+                                        </td>
+                                        <td>
+                                            @item.second_vertex
+                                        </td>
+                                        <td>
+                                            @item.weight
+                                        </td>
+                                        <td>
+                                            @if (item.fmPartition)
+                                            {
+                                                <h6>+</h6>
+                                            }
+                                            else
+                                            {
+                                                <h6>-</h6>}
+                                        </td>
+                                        <td>
+                                            @if (item.beePartition)
+                                            {
+                                                <h6>+</h6>
+                                            }
+                                            else
+                                            {
+                                                <h6>-</h6>}
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <h6>Кількість вершин:@ViewBag.VerticesCount </h6>
+                    <h6>Кількість ребер:@ViewBag.EdgesCount</h6>
+                    <h6 data-toggle="tooltip" title="Вага розрізу за ФМ алгоритмом" data-placement="right">ФМ: @ViewBag.FMSumCut</h6>
+                    <h6 data-toggle="tooltip" title="Вага розрізу за Бджолиним алгоритмом" data-placement="right">Бджолиний : @ViewBag.BeeSumCut</h6>
+                </div>
+
+            </div>
+
+
+
+
+        }
+
+    </div>
+</div>
+
+
+

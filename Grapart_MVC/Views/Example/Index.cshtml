@@ -1,0 +1,178 @@
+﻿@model Grapart_MVC.Models.Solver
+
+@{
+    ViewBag.Title = "Приклад";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-4 ">
+
+
+        @using (Html.BeginForm("Example", "Example"))
+        {
+
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h5>Параметри бджолиного алгоритму:</h5>
+
+                @*<div class="form-group">
+
+                        <div class="col-md-offset-2 col-md-10">
+                            <p>@Html.ActionLink("Заповнити", "OptimalValues", "Example", new { @class = "btn btn-default btn-success", @data_toggle = "tooltip", @title = "Заповнити уніврсальними параметрами", @data_placement = "left" })</p>
+                        </div>
+                    </div>*@
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ns, htmlAttributes: new { @class = "control-label col-12" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ns, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 4 до 40", @data_placement = "left" } })
+                        @Html.ValidationMessageFor(model => model.ns, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.mb, htmlAttributes: new { @class = "control-label col-12" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.mb, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 2 до ns", @data_placement = "left" } })
+                        @Html.ValidationMessageFor(model => model.mb, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.nf, htmlAttributes: new { @class = "control-label col-12" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.nf, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 2*mb до 5*ns", @data_placement = "left" } })
+                        @Html.ValidationMessageFor(model => model.nf, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.r, htmlAttributes: new { @class = "control-label col-12" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.r, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 1 до V/4", @data_placement = "left" } })
+                        @Html.ValidationMessageFor(model => model.r, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.stopCount, htmlAttributes: new { @class = "control-label col-12" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.stopCount, new { htmlAttributes = new { @class = "form-control", @data_toggle = "tooltip", @title = "Від 1 до 30", @data_placement = "left" } })
+                        @Html.ValidationMessageFor(model => model.stopCount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <a href="@Url.Action("OptimalValues", "Example")" class="btn  btn-outline-success" data-toggle="tooltip" title="Заповнити уніврсальними параметрами" data-placement="left"> Заповнити<i class="fa fa-arrow-up"></i></a>
+                        <input type="submit" value="Почати" class="btn btn-success center-block" data-toggle="tooltip" title="Запуск алгоритмів" data-placement="right" />
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+    <div class="col-md-8">
+
+        <h5 class="text-center">Розбиття графа-приклада</h5>
+        <div class="row">
+            <div class="col-6"> <img src="~/Content/ExampleGraphImg.png" class="shadow-sm img-fluid"></div>
+
+            <div class="col-6">
+                <br>
+                <p class="text-muted"><i class="glyphicon glyphicon-question-sign"></i>Введіть параметри для Бджолиного алгоритму та натисніть "Почати" щоб запустити обидва алгоритми розв'язання задачі на вказаному статичному графі .</p>
+                <p class="text-muted">Кількість вершин V: @ViewBag.VerticesCount</p>
+
+                <p class="text-muted">Кількість ребер E: @ViewBag.EdgesCount</p>
+                <h6>Вага розрізу за ФМ: @ViewBag.FMSumCut</h6>
+                <h6>Вага розрізу за Бджолиним : @ViewBag.BeeSumCut</h6>
+
+            </div>
+        </div>
+        <br>
+        <table class="table table-hover table-sm thead-light " border="1">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        I вершина ребра
+                    </th>
+                    <th scope="col">
+                        IІ вершина ребра
+                    </th>
+                    <th scope="col">
+                        Вага ребра
+                    </th>
+                    <th scope="col">
+                        ФМ
+                    </th>
+                    <th scope="col">
+                        Бджолиний
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (ViewBag.Flag == null)
+                {
+                    foreach (var item in ViewBag.Result)
+                    {
+                        <tr>
+                            <td>
+                                @item.first_vertex
+                            </td>
+                            <td>
+                                @item.second_vertex
+                            </td>
+                            <td>
+                                @item.weight
+                            </td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    }
+                }
+                @if (ViewBag.Flag == 1)
+                {
+                    foreach (var item in ViewBag.Result)
+                    {
+                        <tr>
+                            <td>
+                                @item.first_vertex
+                            </td>
+                            <td>
+                                @item.second_vertex
+                            </td>
+                            <td>
+                                @item.weight
+                            </td>
+                            <td>
+                                @if (item.fmPartition)
+                                {
+                                    <h6>+</h6>
+                                }
+                                else
+                                { <h6>-</h6>}
+                            </td>
+                            <td>
+                                @if (item.beePartition)
+                                {
+                                    <h6>+</h6>
+                                }
+                                else
+                                { <h6>-</h6>}
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+
+
+
+
+    </div>
+</div>
